@@ -6,6 +6,11 @@ pipeline {
         echo 'Testando'
       }
     }
+    stage('') {
+      steps {
+        sh 'echo "Vamos testar a porra toda"'
+      }
+    }
   }
   environment {
     name = 'test'
