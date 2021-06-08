@@ -1,0 +1,84 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teste-app
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: teste-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: teste-app
+        app.kubernetes.io/name: teste-app
+    spec:
+#      imagePullSecrets:
+#        - name: regcred
+      containers:
+        - image: index.docker.io/r7com/teste-api
+          imagePullPolicy: Always
+          name: teste-app
+          ports:
+          - containerPort: 80
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "100Mi"
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: teste-service
+  namespace: default
+  labels:
+    app: teste-app
+    service: teste-app
+    app.kubernetes.io/name: teste-app
+spec:
+  selector:
+    app: teste-app
+  ports:
+    - name: http
+      port: 5678 # Default port for image
+      targetPort: 5678
+      protocol: TCP
+      
+#---
+#apiVersion: autoscaling/v1
+#kind: HorizontalPodAutoscaler
+#metadata:
+#  name: teste-hpa
+#spec:
+#  scaleTargetRef:
+#    apiVersion: apps/v1
+#    kind: Deployment
+#    name: teste-app
+#  minReplicas: 1
+#  maxReplicas: 5
+#  targetCPUUtilizationPercentage: 60
+#
+#---
+#apiVersion: extensions/v1beta1
+#kind: Ingress
+#metadata:
+#  name: teste-ingress
+#  #annotations:
+#    #konghq.com/strip-path: "true"
+#    #kubernetes.io/ingress.class: kong
+#spec:
+#  rules:
+#  - host: teste.com
+#    http:
+#      paths:
+#      - path: /
+#        backend:
+#          serviceName: teste-service
+#          servicePort: 5678
+#teste11
