@@ -6,7 +6,6 @@ pipeline {
         parallel(
           "Test": {
             echo 'Testandoooo'
-            
           },
           "Test2": {
             sh 'echo "Testandooooo"'
